@@ -1,0 +1,18 @@
+colorama  --> using this you will be able to write with color in the terminal.
+
+tqdm --> You can add progress bar to the for iterations
+
+
+keyboard --> you can tell the python to type whatever you want
+
+
+pdb --> python debugger
+
+tabulate --> you can print the 2D arrays in terminal in a neatest way!
+
+
+Checkout this video : https://www.dideo.ir/v/yt/MHlwl6GsT8s/12-python-tips-%26-tricks-that-you-aren%27t-using-but
+
+
+########################################3
+
