@@ -1,0 +1,5 @@
+when you are using the vim text editor, it is worth to add some new features to it. among them are the auto indentation, syntax color, auto pairing for (, {, ', " and etc.
+
+
+locate the .vimrc file in your '~' (Home) directory
+then the vim will do its job!

@@ -1,5 +1,6 @@
 class Singleton_object(object):
     class __Singleto_object():
+
         def __init__(self):
             self.val = None
 
