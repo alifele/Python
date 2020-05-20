@@ -1,4 +1,4 @@
-# Neural Netwrok Plotter
+# Neural Network Plotter
 
 
 A simple package that can plot sequential graphs. On of the well-known example of such graphs is the sequential neural networks.
