@@ -1,2 +1,3 @@
+# Neural Notwork Plotter
 
-![](https://github.com/alifele/Python/blob/master/MyPackages/Neural%20Network%20Plotter/neuralnetwork.png) 
+Using matplotlib
