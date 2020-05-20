@@ -14,7 +14,8 @@ Using this package you can draw your network.
 
 ### Simple Exmaple
 
-```
+```python
+
 total_shape = [8,5,3,2,3,5,8]
 edge = []
 
