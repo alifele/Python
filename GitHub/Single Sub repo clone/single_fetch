@@ -1,0 +1,12 @@
+#!/bin/bash
+
+git init fofo
+cd fofo
+git remote add -f origin $1
+
+git config core.sparseCheckout true
+
+echo "$2" >> .git/info/sparse-checkout
+
+
+git pull origin master
