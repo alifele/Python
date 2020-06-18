@@ -4,15 +4,24 @@ import sys
 from pygame import gfxdraw
 import numpy as np
 from perlin_noise import generate_perlin_noise_2d
+import pdb
+import matplotlib.pyplot as plt
 
 global life_time
-life_time = 500
+life_time = 250
+n_rockets = 80
+cross_over_ratio = 0.5
+mutation_ratio = 0.1
+mutation_rate = 0.5
+golden_transfer_ratio = 0.2
+
+
 
 
 #
 # ██████   ██████   ██████ ██   ██ ███████ ████████
 # ██   ██ ██    ██ ██      ██  ██  ██         ██
-# ██████  ██    ██ ██      █████   █████      ██
+#  ██████  ██    ██ ██      █████   █████      ██
 # ██   ██ ██    ██ ██      ██  ██  ██         ██
 # ██   ██  ██████   ██████ ██   ██ ███████    ██
 
@@ -29,16 +38,20 @@ class Rocket:
         #self.forcey = 150*(np.random.randn(life_time))
         self.forcex = noise1 # numpy array
         self.forcey = noise2 # numpy array
+
+
+
         self.screen = screen
         self.freez = False
         self.fitness = 0
+        self.fitness_norm = 0
 
 
     def reset_x_v(self):
         self.x = width/2
         self.y = height-50
-        self.vx = 10 * (np.random.randn())
-        self.vy = 10 * (np.random.randn())-5
+        self.vx = 0 * (np.random.randn())
+        self.vy = 0 * (np.random.randn())-5
 
 
     def draw(self):
@@ -46,6 +59,7 @@ class Rocket:
         # I used the above function to reduce the aliasing in the drawn circle
 
     def move(self,frame,dt):
+
         if self.freez == False:
             self.vx += self.forcex[frame]*dt
             self.vy += self.forcey[frame]*dt
@@ -55,7 +69,6 @@ class Rocket:
 
     def calc_fittness(self, target_center):
         self.fitness = 1/((self.dist((self.x, self.y), target_center))+1)
-
 
 
     def dist(self, A,B):
@@ -113,7 +126,7 @@ class Game:
 
     def init_rockets(self):
         if self.flag == 'first_round':
-            self.n_rockets = 50
+            self.n_rockets = n_rockets
             self.rocket_list = []
             for i in range(self.n_rockets):
                 noise1 = 150*(self.noises1[i*life_time:(i+1)*life_time])
@@ -151,8 +164,27 @@ class Game:
     def run(self):
         while True:
             self.run_generation()
+
+            self.new_rock_list = []
             self.fitness()
+            self.golden_transfer()
             self.cross_over()
+            self.mutate()
+            self.random_transfer()
+
+            print(len(self.rocket_list))
+
+            self.rocket_list = self.new_rock_list.copy()
+
+
+    def random_transfer(self):
+        n = len(self.rocket_list) - len(self.new_rock_list)
+
+        for i in range(n):
+            rand = np.random.random()
+            rock = self.rocket_list[rand]
+            self.new_rock_list.append(Rocket(width/2, height-50,self.screen, rock.forcex.copy(), rock.forcey.copy()))
+
 
 
 
@@ -161,24 +193,67 @@ class Game:
         for rock in self.rocket_list:
             rock.calc_fittness(self.target.center)
 
-        sum_of_fit = 0
-        for rock in self.rocket_list:
-            sum_of_fit += rock.fitness
 
-        for rock in self.rocket_list:
-            rock.fitness /= sum_of_fit
+        self.rockets_score_list = []
+        for i, elem in enumerate(self.rocket_list):
+            self.rockets_score_list.append([elem.fitness,i,elem.fitness,-1]) # third is for normal_score, fourth is for accum
+        self.rockets_score_list = np.array(self.rockets_score_list)
 
-        self.accum_list = []
-        self.accum_list.append(self.rocket_list[0].fitness)
-        for rock in self.rocket_list[1:]:
-            self.accum_list.append(self.accum_list[-1]+rock.fitness)
+
+        self.rockets_score_list = self.rockets_score_list[self.rockets_score_list[:,0].argsort()][::-1]
+
+        sum_of_fit = self.rockets_score_list[:,0].sum()
+        self.rockets_score_list[:,2] /= sum_of_fit
+
+
+        self.rockets_score_list[0,3] = self.rockets_score_list[0,2]
+        for i in range(1, len(self.rockets_score_list)):
+            self.rockets_score_list[i,3]=self.rockets_score_list[i-1,3]+self.rockets_score_list[i,2]
+
+
+    def mutate(self):
+        for i in range(int(mutation_ratio*n_rockets)):
+
+
+            rand = np.random.random(2)
+            rock_ind = np.argmax(rand[0] < self.rockets_score_list[:,3])
+
+
+            gen1_x = self.rocket_list[rock_ind].forcex.copy()
+            gen1_y = self.rocket_list[rock_ind].forcey.copy()
+
+            rand_ind1 = np.random.randint(len(gen1_x), size=int(mutation_rate*len(gen1_x))+1)
+            rand_ind2 = np.random.randint(len(gen1_x), size=int(mutation_rate*len(gen1_x))+1)
+
+            gen1_x[rand_ind1] = np.random.random(len(rand_ind1)) * gen1_x[0]
+            gen1_y[rand_ind2] = np.random.random(len(rand_ind1)) * gen1_y[0]
+
+
+
+            self.new_rock_list.append(Rocket(width/2, height-50,self.screen, gen1_x.copy(), gen1_y.copy()))
+
+
+
+
+
+    def golden_transfer(self):
+        for i in range(int(golden_transfer_ratio * n_rockets)):
+            elem = int(self.rockets_score_list[i,1])
+            rocket = self.rocket_list[elem]
+            self.new_rock_list.append(Rocket(width/2, height-50,self.screen,rocket.forcex.copy(), rocket.forcey.copy()))
+
+
+
+
+
 
     def cross_over(self):
-        mutation_rate = 0.05
-        for i in range(int(self.n_rockets/3)):
+        for i in range(int(n_rockets*cross_over_ratio)):
+
             rand = np.random.random(2)
-            rock1_ind = np.argmax(rand[0] < self.accum_list)
-            rock2_ind = np.argmax(rand[1] < self.accum_list)
+            rock1_ind = np.argmax(rand[0] < self.rockets_score_list[:,3])
+            rock2_ind = np.argmax(rand[1] < self.rockets_score_list[:,3])
+
 
             gen1_x = self.rocket_list[rock1_ind].forcex.copy()
             gen1_y = self.rocket_list[rock1_ind].forcey.copy()
@@ -190,22 +265,17 @@ class Game:
             cross_over_rand1 = np.random.randint(life_time)
             cross_over_rand2 = np.random.randint(life_time)
 
-            new_gen1_x = gen1_x[:cross_over_rand1].tolist() + gen2_x[cross_over_rand1:].tolist()
-            new_gen1_x = np.array(new_gen1_x)
-            new_gen1_y = gen1_y[:cross_over_rand2].tolist() + gen2_y[cross_over_rand2:].tolist()
-            new_gen1_y = np.array(new_gen1_y)
-
-            new_gen2_x = gen2_x[:cross_over_rand1].tolist() + gen1_x[cross_over_rand1:].tolist()
-            new_gen2_x = np.array(new_gen2_x)
-            new_gen2_y = gen2_y[:cross_over_rand2].tolist() + gen1_y[cross_over_rand2:].tolist()
-            new_gen2_y = np.array(new_gen2_y)
+            temp1 = gen1_x[cross_over_rand1:].copy()
+            gen1_x[cross_over_rand1:] = gen2_x[cross_over_rand1:].copy()
+            gen2_x[cross_over_rand1:] = temp1.copy()
 
 
-            self.rocket_list[rock1_ind].forcex = new_gen1_x
-            self.rocket_list[rock1_ind].forcey = new_gen1_y
+            temp1 = gen1_y[cross_over_rand2:].copy()
+            gen1_y[cross_over_rand2:] = gen2_y[cross_over_rand2:].copy()
+            gen2_y[cross_over_rand2:] = temp1.copy()
 
-            self.rocket_list[rock2_ind].forcex = new_gen2_x
-            self.rocket_list[rock2_ind].forcey = new_gen2_y
+            self.new_rock_list.append(Rocket(width/2, height-50,self.screen,gen1_x.copy(), gen1_y.copy()))
+            self.new_rock_list.append(Rocket(width/2, height-50,self.screen,gen2_x.copy(), gen2_y.copy()))
 
 
 
