@@ -28,24 +28,24 @@ This elemts will have a propagation dely
 
 
 ***
-#Tutorial 
+# Tutorial 
 
-##I) What is in this package?
+## I) What is in this package?
 
-###1. Ideal Gates
+### 1. Ideal Gates
 This simulator has 7 built in Ideal gates (which has no propagation error).
 These gates are : AND, OR, XOR, NAND, NOR, XNOR, NOT.
 
-###2. Standard Parts
+### 2. Standard Parts
 Ideal gates and components are only useful when you want to learn the basics of logical circuits. But to design a real world circuit, you will use real world electronic components which are not Ideal any more. they have propagatoin delay, input and output limits and etc.
 This package also has some of the well-known ICs. If you are using a component that there is no library for it in the software, you can easily add new ones (based on its chrachteristics discussed on the datasheet). we will get to that soon.
 
-###3. Signals
+### 3. Signals
 every circuit board is designed in order to manipulate the inputs and generate desierd outputs. the inputs can be as simple as the logical 0 and 1 or as complicate as a audio signal. In this package there are built in signals that you can use to examine your circuite. Also you can add your own costum signal, which we will descuss it later.
 Here is the list of the built in signals:
 Sine wave, 
 
-###4. Probes
+### 4. Probes
 
 to figure out what is going on in your circuit (for evaluating and debugging purposes) you need a tool that can monitor the output of a specific node of your circuite. This is easily done 
 			
@@ -68,9 +68,9 @@ myCiruit = Circuit();
 
 
 
-####1. Adding New Standard Parts
+#### 1. Adding New Standard Parts
 
-####2. costum signals 
+#### 2. costum signals 
 
 
 Ali Fele Paranj
