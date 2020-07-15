@@ -55,8 +55,34 @@ to figure out what is going on in your circuit (for evaluating and debugging pur
 
 
 Using this package is very strait forward. As the first Step, you need to draw the sketch of your circuite. This is required, because you need the nodes of your circuite, in order to use this package.
-Now, to define the circuite in the software, you need to 
+Now, to define the circuite in the software, you need to make an instace of the Circuit class.
+This class gets the inputs and outputs of the circut in its input. you need to 
+simply use the python built in dictionary for this purpose. This Dictionary must have only the following keys :
+
+| key            | Value     | Description                             |
+|----------------|-----------|-----------------------------------------|
+| inputs         | ['a','b'] | 'a' and 'b' are the binary inputs           |
+| outputs        | ['out']   | 'out' is the  binary output             |
+| inputs_vector  | ['A', 4]  | 'A' is the input bus which has 4 bits   |
+| outputs vector | ['OUT' 5] | 'OUT' is the input bus which has 5 bits |
+
+Now suppose that we want to simulate the following circuit in the package:
+
+
 ```python
+
+# The first way to define the inputs and outputs
+inout1 = {
+	'inputs' : ['a','b','c','d'] ,
+	'outputs' : ['out']
+}
+
+# The second way to define the inputs and outputs
+inout2 = {
+	'inputs_vector' : ['A', 4] ,
+	'outputs' : ['out']
+}
+
 myCiruit = Circuit();
 ```
 
