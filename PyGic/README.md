@@ -1,4 +1,4 @@
-![](https://github.com/alifele/Python/raw/master/PyGic/logo.png) 
+![](https://github.com/alifele/Python/raw/master/PyGic/Pic/logo.png) 
 
 
 Documentation for PyGic Simulator.
@@ -43,7 +43,8 @@ This package also has some of the well-known ICs. If you are using a component t
 ### 3. Signals
 every circuit board is designed in order to manipulate the inputs and generate desierd outputs. the inputs can be as simple as the logical 0 and 1 or as complicate as a audio signal. In this package there are built in signals that you can use to examine your circuite. Also you can add your own costum signal, which we will descuss it later.
 Here is the list of the built in signals:
-Sine wave, 
+Sine wave, square wave, trianagle wave, saw tooth wave, digital clock, logical 0 and 1 and last but not least a custom sequence.
+
 
 ### 4. Probes
 
@@ -66,8 +67,13 @@ simply use the python built in dictionary for this purpose. This Dictionary must
 | inputs_vector  | ['A', 4]  | 'A' is the input bus which has 4 bits   |
 | outputs vector | ['OUT' 5] | 'OUT' is the input bus which has 5 bits |
 
-Now suppose that we want to simulate the following circuit in the package:
+when you are creating the new instance of the Circuit class, you need to pass this dictionary as its input. You can check out the source code to figure out what is happening inside this class.
 
+
+
+Now suppose that we want to simulate the following circuit in the package^1^:
+
+![](https://raw.githubusercontent.com/alifele/Python/master/PyGic/Pic/sim_circuit.png) 
 
 ```python
 
@@ -83,14 +89,57 @@ inout2 = {
 	'outputs' : ['out']
 }
 
-myCiruit = Circuit();
+myCircuit = Circuit( inout1 );
 ```
 
+#### Architecture Design
+
+Now you have to desing the architecture of the circuit.
+All of the built in gates are the methods of the Circuit class.
+So to put a gate to the desing of your circuit, you need just simply call the appropirate method. the GATE methods will accept three argumets, in which the first argument is the output and the others are the inputs (exaclty like Verilog). Here is the possible gates:
+
+| Gate | Method   |
+|------|----------|
+| AND  | ANDgate  |
+| OR   | ORgate   |
+| XOR  | XORgate  |
+| NAND | NANDgate |
+| NOR  | NORgate  |
+| XNOR | XNORgate |
+| NOT  | NOTgate  |
+
+for example, to desing the sample circuit you should write
+
+```python
+myCircuit.ANDgate('node1', 'a', 'b')
+myCircuit.ANDgate('node2', 'c', 'd')
+myCircuit.NORgate('out', 'node1', 'node2')
+```
+#### applying signal stimulus
+
+Now we need to add stimulus to the circuit. as we disscused earlier, there are 7 different built in signals that you can apply to your circiut.
+Here is the table that contains all of the options you have:
+
+| Signal           | Method        |
+|------------------|---------------|
+| Sine wave        | applySine     |
+| Square wave      | applySquare   |
+| Triangle wave    | applyTriange  |
+| Sawtooth wave    | applySawtooth |
+| digital clock    | applyClk      |
+| logical 0 1      | applyLogic    |
+| custom Sequence | applySeq      |
 
 
+Every signal needs a config input as its argument (written in the form of a python dictionary). You can find more information about the configuration of each signals in the documentation of the source code.
+The other input that you need to pass to the method is the node that you want to apply the stimulus in. Note that you can not apply the stimulus to the output of any gates.
+
+For example, suppose that we want to apply logical binary inputs to the inputs of the circuit.
+
+#### Monitoring the nodes with probes
 
 
-## III) Costuming package based on your needs
+## III) Costumizing package based on your needs
 
 
 
@@ -98,6 +147,9 @@ myCiruit = Circuit();
 
 #### 2. costum signals 
 
+
+Notes:
+1. I have used https://logic.ly/demo website for the drawings.
 
 Ali Fele Paranj
 Physics student at sharif university of tech.
