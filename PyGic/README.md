@@ -136,7 +136,19 @@ The other input that you need to pass to the method is the node that you want to
 
 For example, suppose that we want to apply logical binary inputs to the inputs of the circuit.
 
-#### Monitoring the nodes with probes
+#### Monitoring the nodes using probes
+Probes are built in tools in the Circuit class that you can use them to monitor the outputs in different nodes of your ciruit. These are something like osciloscope or logic analyzer. To put the probe at any node of your circuit, you need just simply write 
+
+
+```python
+myCircuit.putProbe(['node1', 'output'])
+```
+so now, you have two probes attached to node1 and output node. We will see later how you can see the results of your probes.
+
+#### Starting the Simulation
+
+So far we have designed the circuit and now computer knows where each gate is located and knows how every element is connected to each other. Now we need to run the simulation in order to see how the circuit behaves under applyed stimulus. To do this you need to call the "startSimulation" method of the Circuit object. This method needs a configuration dictionary to passed as its arguments. This dictionary has the required information that the method needs to run the simulation. among those configuration information, "time scale" and "simulation time" are mandatory.
+ For example if you have any clk input, the period of clk will be the "time scale".  Time scale refers to the duration of your clock pulse (if you have any) or the lowest duration of the alternating input. On the other hand, simulation time is the duration that you want to evaluate the behavior of your system at.
 
 
 ## III) Costumizing package based on your needs
