@@ -65,7 +65,7 @@ simply use the python built in dictionary for this purpose. This Dictionary must
 | inputs         | ['a','b'] | 'a' and 'b' are the binary inputs           |
 | outputs        | ['out']   | 'out' is the  binary output             |
 | inputs_vector  | ['A', 4]  | 'A' is the input bus which has 4 bits   |
-| outputs vector | ['OUT' 5] | 'OUT' is the input bus which has 5 bits |
+| outputs_vector | ['OUT' 5] | 'OUT' is the input bus which has 5 bits |
 
 when you are creating the new instance of the Circuit class, you need to pass this dictionary as its input. You can check out the source code to figure out what is happening inside this class.
 
