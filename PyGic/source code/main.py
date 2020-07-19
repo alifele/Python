@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import copy
 import pdb
+import digiPlotter as Dplotter
 
 ##
 
@@ -144,24 +145,83 @@ class Circuit:
         return self.gates[out]['func'](self.gates[out]['in'])
 
 
+    def Run(self, inputs, outnode, time_step, order):
+        result = []
+        self.time_step = time_step
+        for elem in inputs:
+            self.addBits(order,elem)
+            out = self.run_simulation(outnode)
+            result.append(out)
+
+        self.resultDict = {}
+        self.resultDict[outnode] = result
+        inputs_ = np.array(inputs)
+        for i in range(inputs_.shape[1]):
+            self.resultDict[order[i]] = inputs_[:,i]
+
+        return result
+
+
+    def plot(self):
+        fig = plt.figure(figsize=(12,4))
+        ax  = fig.add_subplot(1,1,1)
+        space = 0
+        for key in self.resultDict.keys():
+            edge = []
+            curr_time = 0
+            edge.append(curr_time)
+            for i,elem in enumerate(self.resultDict[key]):
+                if i == 0:
+                    continue
+                curr_time += self.time_step
+                if elem != self.resultDict[key][i-1]:
+                    edge.append(curr_time)
+
+            t_end = self.time_step * len(result)
+            if self.resultDict[key][0]==0:
+                first_edge = 'rise'
+            else:
+                first_edge = 'rise'
+            signal = Dplotter.Signal(edge, first_edge, t_end)
+            elem = signal.generate()
+            ax.plot(elem[0], elem[1] + space,c=np.random.rand(3,)/1.35, label=key, lw=7)
+            ax.axis('equal')
+            ax.grid()
+            handles, labels = ax.get_legend_handles_labels()
+            ax.legend(handles[::-1], labels[::-1], title='Line', loc='upper left')
+            #ax.legend()
+            ax.set_yticks([])
+            space += 1.5
+
+        plt.show()
 
 
 
 
-## Test Bench
 
-inout = {
-    'inputs': ['a','b','c','d'],
-    'outputs': ['out']
-}
 
-myCirc = Circuit(inout)
-myCirc.addXORgate('node1', ['a','b'])
-myCirc.addANDgate('node2', ['c','d'])
-myCirc.addORgate('out', ['node1', 'node2'])
-myCirc.addBit('a',1)
-myCirc.addBits(['b','c','d'],[1,0,0])
-out = myCirc.run_simulation('out')
-print(out)
+
+## The code bellow, shows a simple exmaple that how you can use
+## this library
+## You can also import this library into your script
+if __name__ == "__main__":
+
+    inout = {
+        'inputs': ['a','b','c','d'],
+        'outputs': ['out']
+    }
+
+    myCirc = Circuit(inout)
+    myCirc.addANDgate('node1', ['a','b'])
+    myCirc.addANDgate('node2', ['c','d'])
+    myCirc.addORgate('out', ['node1', 'node2'])
+
+    inputs = [[1,1,1,1],[1,0,0,1],[0,0,1,1],[1,0,1,0],[1,0,0,0]]
+
+    result = myCirc.Run(inputs, 'out', time_step = 5, order=['a','b','c','d'])
+    #print(result)
+    #print(myCirc.result)
+    myCirc.plot()
+
 
 #
