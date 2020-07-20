@@ -184,7 +184,7 @@ class Circuit:
                 first_edge = 'rise'
             signal = Dplotter.Signal(edge, first_edge, t_end)
             elem = signal.generate()
-            ax.plot(elem[0], elem[1] + space,c=np.random.rand(3,)/1.35, label=key, lw=7)
+            ax.plot(elem[0], elem[1] + space,c=np.random.rand(3,)/1.35, label=key, lw=6)
             ax.axis('equal')
             ax.grid()
             handles, labels = ax.get_legend_handles_labels()
