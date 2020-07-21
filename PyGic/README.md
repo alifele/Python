@@ -161,8 +161,6 @@ myCirc.addANDgate('out2', ['node1', 'node2'])
 inputs = [[1,1,1,1],[1,0,0,1],[0,0,1,1],[1,0,1,0],[1,0,0,0]]
 
 result = myCirc.Run(inputs, ['out1','out2'], time_step = 5, order=['a','b','c','d'])
-#print(result)
-#print(myCirc.result)
 myCirc.plot()
 
 ```
@@ -171,8 +169,38 @@ myCirc.plot()
 
 ## 2. Full adder
 
+![](https://raw.githubusercontent.com/alifele/Python/master/PyGic/Pic/example2.png) 
 
 
+```python
+from main import Circuit
+
+inout = {
+    'inputs': ['a','b', 'c_in'],
+    'outputs': ['s', 'c_out']
+}
+
+myCirc = Circuit(inout)
+myCirc.addXORgate('node1', ['a','b'])
+myCirc.addXORgate('s', ['node1','c_in'])
+myCirc.addANDgate('node2', ['node1','c_in'])
+myCirc.addANDgate('node3', ['a','b'])
+myCirc.addORgate('c_out', ['node2', 'node3'])
+
+
+inputs = [[1,1,1],[1,0,0],[0,0,1],[1,0,1],[1,0,0]]
+
+result = myCirc.Run(inputs, ['s','c_out'], time_step = 5, order=['a','b','c_in'])
+#print(result)
+#print(myCirc.result)
+myCirc.plot()
+
+```
+
+![](https://raw.githubusercontent.com/alifele/Python/master/PyGic/Pic/result2.png) 
+
+
+***
 Notes:
 1. I have used https://logic.ly/demo website for the drawings.
 
