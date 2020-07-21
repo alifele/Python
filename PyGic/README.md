@@ -22,21 +22,31 @@ This document contains the following material:
 
 # Documentation
 
-### 1. Ideal Gates
-This simulator has 7 built in Ideal gates (which has no propagation error).
-These gates are : AND, OR, XOR, NAND, NOR, XNOR, NOT.
+## Source Code
 
-### 2. Standard Parts
+The first version of this package, contains two source code, main.py and digiPlotter.py. 
+main.py, contains the simulator kernel. Circuit class, is the only class defined inside the script, which can be used to describe your circuit with. Also, you can run you simulation and calculate the output your circuit. We will go for that how to use this class later.
+digiPlotter.py, is a plotting utility, which uses matplotlib in the backend, and you can easily plot the wave form of the inputs and outputs of circuit. Note that, you don't need to directly deal with this script. main.py uses this library to show the results.
+
+
+
+## Utilities
+
+As I said before, there are built in gates in this library, that you can use them to describe your circuit easily. PyGic, uses a "gate approach" to define the circuit. you we see later, how you can define your circuit with this approach. The first version of this package, only contains the simulator kernel which can only simulate the cominational circuits built with ideal gates.
+
+## Future works
+AND, NOR, XNOR, NOT.
+
+### 1. Standard Parts
 Ideal gates and components are only useful when you want to learn the basics of logical circuits. But to design a real world circuit, you will use real world electronic components which are not Ideal any more. they have propagatoin delay, input and output limits and etc.
 This package also has some of the well-known ICs. If you are using a component that there is no library for it in the software, you can easily add new ones (based on its chrachteristics discussed on the datasheet). we will get to that soon.
 
-### 3. Signals
+### 2. Signals (for Sequential Circuits)
 every circuit board is designed in order to manipulate the inputs and generate desierd outputs. the inputs can be as simple as the logical 0 and 1 or as complicate as a audio signal. In this package there are built in signals that you can use to examine your circuite. Also you can add your own costum signal, which we will descuss it later.
 Here is the list of the built in signals:
 Sine wave, square wave, trianagle wave, saw tooth wave, digital clock, logical 0 and 1 and last but not least a custom sequence.
 
-
-### 4. Probes
+### 3. Probes
 
 to figure out what is going on in your circuit (for evaluating and debugging purposes) you need a tool that can monitor the output of a specific node of your circuite. This is easily done 
 			
@@ -46,7 +56,7 @@ to figure out what is going on in your circuit (for evaluating and debugging pur
 
 			
 
-Using this package is very strait forward. As the first Step, you need to draw the sketch of your circuite. This is required, because you need the nodes of your circuite, in order to use this package.
+Using this package is very straightforward. As the first Step, you need to draw the sketch of your circuite. This is required, because you need the nodes of your circuite, in order to use this package.
 Now, to define the circuite in the software, you need to make an instace of the Circuit class.
 This class gets the inputs and outputs of the circut in its input. you need to 
 simply use the python built in dictionary for this purpose. This Dictionary must have only the following keys :
@@ -55,8 +65,7 @@ simply use the python built in dictionary for this purpose. This Dictionary must
 |----------------|-----------|-----------------------------------------|
 | inputs         | ['a','b'] | 'a' and 'b' are the binary inputs           |
 | outputs        | ['out']   | 'out' is the  binary output             |
-| inputs_vector  | ['A', 4]  | 'A' is the input bus which has 4 bits   |
-| outputs_vector | ['OUT' 5] | 'OUT' is the input bus which has 5 bits |
+
 
 when you are creating the new instance of the Circuit class, you need to pass this dictionary as its input. You can check out the source code to figure out what is happening inside this class.
 
@@ -74,11 +83,7 @@ inout1 = {
 	'outputs' : ['out']
 }
 
-# The second way to define the inputs and outputs
-inout2 = {
-	'inputs_vector' : ['A', 4] ,
-	'outputs' : ['out']
-}
+
 
 myCircuit = Circuit( inout1 );
 ```
@@ -91,59 +96,79 @@ So to put a gate to the desing of your circuit, you need just simply call the ap
 
 | Gate | Method   |
 |------|----------|
-| AND  | ANDgate  |
-| OR   | ORgate   |
-| XOR  | XORgate  |
-| NAND | NANDgate |
-| NOR  | NORgate  |
-| XNOR | XNORgate |
-| NOT  | NOTgate  |
+| AND  | addANDgate  |
+| OR   | addORgate   |
+| XOR  | addXORgate  |
+| NAND | addNANDgate |
+| NOR  | addNORgate  |
+| XNOR | addXNORgate |
+| NOT  | addNOTgate  |
 
 for example, to desing the sample circuit you should write
 
 ```python
-myCircuit.ANDgate('node1', 'a', 'b')
-myCircuit.ANDgate('node2', 'c', 'd')
-myCircuit.NORgate('out', 'node1', 'node2')
+myCircuit.ANDgate('node1', ['a', 'b'])
+myCircuit.ANDgate('node2', ['c', 'd'])
+myCircuit.NORgate('out', ['node1', 'node2'])
 ```
 #### applying signal stimulus
-
-Now we need to add stimulus to the circuit. as we disscused earlier, there are 7 different built in signals that you can apply to your circiut.
-Here is the table that contains all of the options you have:
-
-| Signal           | Method        |
-|------------------|---------------|
-| Sine wave        | applySine     |
-| Square wave      | applySquare   |
-| Triangle wave    | applyTriange  |
-| Sawtooth wave    | applySawtooth |
-| digital clock    | applyClk      |
-| logical 0 1      | applyLogic    |
-| custom Sequence | applySeq      |
-
-
-Every signal needs a config input as its argument (written in the form of a python dictionary). You can find more information about the configuration of each signals in the documentation of the source code.
-The other input that you need to pass to the method is the node that you want to apply the stimulus in. Note that you can not apply the stimulus to the output of any gates.
-
-For example, suppose that we want to apply logical binary inputs to the inputs of the circuit.
-
-#### Monitoring the nodes using probes
-Probes are built in tools in the Circuit class that you can use them to monitor the outputs in different nodes of your ciruit. These are something like osciloscope or logic analyzer. To put the probe at any node of your circuit, you need just simply write 
-
+You can apply input signals to the circuit and get the output of your system. To do this, you should make an array that contains arrays in it. each of the inner arrays, contains the inputs for the input nodes. you can apply more inputs over time by putting more inner arrays. For example the following arrays puts 5 inputs during different times.
 
 ```python
-myCircuit.putProbe(['node1', 'output'])
+inputs = [[1,1,1,1],[1,0,0,1],[0,0,1,1],[1,0,1,0],[1,0,0,0]]
+
 ```
-so now, you have two probes attached to node1 and output node. We will see later how you can see the results of your probes.
+
+
+
+#### Monitoring the nodes using probes
+Probes are built in tools in the Circuit class that you can use them to monitor the outputs in different nodes of your ciruit. These are something like osciloscope or logic analyzer. The probes will be added to the output node and you don't need to do any thing.
+
+
 
 #### Starting the Simulation
 
-So far we have designed the circuit and now computer knows where each gate is located and knows how every element is connected to each other. Now we need to run the simulation in order to see how the circuit behaves under applyed stimulus. To do this you need to call the "startSimulation" method of the Circuit object. This method needs a configuration dictionary to passed as its arguments. This dictionary has the required information that the method needs to run the simulation. among those configuration information, "time scale" and "simulation time" are mandatory.
- For example if you have any clk input, the period of clk will be the "time scale".  Time scale refers to the duration of your clock pulse (if you have any) or the lowest duration of the alternating input. On the other hand, simulation time is the duration that you want to evaluate the behavior of your system at.
-
-
+To start the simulation, you need to call the Run method of the Circuit class. For example see the following code:
+```python
+result = myCirc.Run(inputs, ['out'], time_step = 5, order=['a','b','c','d'])
+```
+As the first argument, you need to pass the inputs array the we defined before. the second argument is the outputs that you want to monitor. time_step argument determines the durtions of the each input to the circuit. And finally the order argument, specifies the order of the input node at the 'inputs' argument. 
+This method returns the result, which you can exmine it yourself. But the better way to evaluate your circuit, it is better to call the plot method of the Circuit class.
+```python
+myCirc.plot()
+```
 
 # Examples
+## 1
+![](https://raw.githubusercontent.com/alifele/Python/master/PyGic/Pic/example1.png) 
+
+
+```python
+from main import Circuit
+
+inout = {
+    'inputs': ['a','b','c','d'],
+    'outputs': ['out', 'out1']
+}
+
+myCirc = Circuit(inout)
+myCirc.addANDgate('node1', ['a','b'])
+myCirc.addANDgate('node2', ['c','d'])
+myCirc.addORgate('out1', ['node1', 'node2'])
+myCirc.addANDgate('out2', ['node1', 'node2'])
+
+
+inputs = [[1,1,1,1],[1,0,0,1],[0,0,1,1],[1,0,1,0],[1,0,0,0]]
+
+result = myCirc.Run(inputs, ['out1','out2'], time_step = 5, order=['a','b','c','d'])
+#print(result)
+#print(myCirc.result)
+myCirc.plot()
+
+```
+
+![](https://raw.githubusercontent.com/alifele/Python/master/PyGic/Pic/result1.png) 
+
 
 
 

@@ -4,7 +4,7 @@ import copy
 import pdb
 import digiPlotter as Dplotter
 
-##
+
 
 class Circuit:
 
@@ -170,6 +170,7 @@ class Circuit:
         for i in range(inputs_.shape[1]):
             self.resultDict[order[i]] = inputs_[:,i]
 
+        self.result = result
         return result
 
 
@@ -190,7 +191,7 @@ class Circuit:
                 if elem != self.resultDict[key][i-1]:
                     edge.append(curr_time)
 
-            t_end = self.time_step * len(result)
+            t_end = self.time_step * len(self.result)
             if self.resultDict[key][0]==0:
                 first_edge = 'rise'
             else:
@@ -210,9 +211,14 @@ class Circuit:
 
 
 
-        ax.grid('on', axis='x')
+        ax.grid('on', axis='x', lw=2, linestyle='--')
+        ax.grid('on', axis='y', lw=1, linestyle='-')
+
         ax.set_yticks(ticks)
         ax.set_yticklabels(ticks_name)
+        ax.set_title('The result of your simulation')
+        ax.set_ylabel('Nodes')
+        ax.set_xlabel('Time')
         #ax.set_yticks(['a','b','c','d'])
         plt.show()
 
@@ -229,19 +235,19 @@ if __name__ == "__main__":
 
     inout = {
         'inputs': ['a','b','c','d'],
-        'outputs': ['out']
+        'outputs': ['out', 'out1']
     }
 
     myCirc = Circuit(inout)
     myCirc.addANDgate('node1', ['a','b'])
     myCirc.addANDgate('node2', ['c','d'])
-    myCirc.addORgate('out', ['node1', 'node2'])
-    myCirc.addANDgate('out1', ['node1', 'node2'])
+    myCirc.addORgate('out1', ['node1', 'node2'])
+    myCirc.addANDgate('out2', ['node1', 'node2'])
 
 
     inputs = [[1,1,1,1],[1,0,0,1],[0,0,1,1],[1,0,1,0],[1,0,0,0]]
 
-    result = myCirc.Run(inputs, ['out','out1'], time_step = 5, order=['a','b','c','d'])
+    result = myCirc.Run(inputs, ['out1','out2'], time_step = 5, order=['a','b','c','d'])
     #print(result)
     #print(myCirc.result)
     myCirc.plot()
