@@ -5,22 +5,32 @@ Documentation for PyGic Simulator.
 
 
 # Discription
-PyGic (stands for Python Logic) is a simple and lightweight Simulator, Written in python. using this software, you will be able to simulate digital circuits and  monitor its outputs. 
-With this package, you can simulate *combinational* circuits. 
+PyGic (stands for Python Logic) is a simple and lightweight Simulator, Written in python. using this software, you will be able to simulate digital circuits and  monitor its outputs.
 
-PyGic, come with 7 standard gates which are AND, OR, XOR, NAND, NOR, XNOR, NOT. Later, I will discuss how to use these gates to descibe your circuit. There is also, a built in digital plotter (to visualize the wave form of the input and output signals.
 
 This project is an open source project, and more features will be added to it. Like Graphical User Interface, Website based version, more complete real world electronics parts, a genetic programinc core to design circuits with AI and so on. So if you want to contribute to this open source project, contact me at ali.fele@gmail.com.
 
+
+### Ideal Parts
+* Ideal AND, OR, NOT, XOR, NAND, NOR, XNOR Gates
+* FlipFlops (RS, JK, T, D)
+* Signals ( sin wave, triangle, clock, pulse, pwm) 
+* Probes ( to find the wave forms at the nodes)
+* Flow table, Transition table, characteristics tables, etc. for circuits
+* Some of the well-known circuits (like adder, shift register, decoder, encoder, SevenSegements decoders, counters, )
+* Examples (pattern detector, ...)
+
+
+### Parts Library
+This elemts will have a propagation dely
+
+
+
+
 ***
+# Tutorial 
 
-This document contains the following material:
-1. A brief documentation of the code and utilities
-2. Tutorial
-3. examples
-
-
-# Documentation
+## I) What is in this package?
 
 ### 1. Ideal Gates
 This simulator has 7 built in Ideal gates (which has no propagation error).
@@ -41,10 +51,9 @@ Sine wave, square wave, trianagle wave, saw tooth wave, digital clock, logical 0
 to figure out what is going on in your circuit (for evaluating and debugging purposes) you need a tool that can monitor the output of a specific node of your circuite. This is easily done 
 			
 			
-
-# Tutorial 
-
 			
+## II) Getting started
+
 
 Using this package is very strait forward. As the first Step, you need to draw the sketch of your circuite. This is required, because you need the nodes of your circuite, in order to use this package.
 Now, to define the circuite in the software, you need to make an instace of the Circuit class.
@@ -142,9 +151,13 @@ So far we have designed the circuit and now computer knows where each gate is lo
  For example if you have any clk input, the period of clk will be the "time scale".  Time scale refers to the duration of your clock pulse (if you have any) or the lowest duration of the alternating input. On the other hand, simulation time is the duration that you want to evaluate the behavior of your system at.
 
 
+## III) Costumizing package based on your needs
 
-# Examples
 
+
+#### 1. Adding New Standard Parts
+
+#### 2. costum signals 
 
 
 Notes:
