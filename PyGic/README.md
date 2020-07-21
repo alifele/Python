@@ -139,7 +139,7 @@ myCirc.plot()
 ```
 
 # Examples
-## 1
+## 1. Sample Circuit
 ![](https://raw.githubusercontent.com/alifele/Python/master/PyGic/Pic/example1.png) 
 
 
@@ -169,6 +169,7 @@ myCirc.plot()
 
 ![](https://raw.githubusercontent.com/alifele/Python/master/PyGic/Pic/result1.png) 
 
+## 2. Full adder
 
 
 
