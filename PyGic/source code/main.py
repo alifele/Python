@@ -142,19 +142,30 @@ class Circuit:
             self.gates[I]['in'] = L
 
     def run_simulation(self, out):
-        return self.gates[out]['func'](self.gates[out]['in'])
+        result = []
+        #print(i)
+        result.append(self.gates[out]['func'](self.gates[out]['in']))
+        return result
 
 
     def Run(self, inputs, outnode, time_step, order):
-        result = []
-        self.time_step = time_step
-        for elem in inputs:
-            self.addBits(order,elem)
-            out = self.run_simulation(outnode)
-            result.append(out)
-
         self.resultDict = {}
-        self.resultDict[outnode] = result
+        for OUT in outnode:
+            result = []
+            self.time_step = time_step
+            for elem in inputs:
+                self.addBits(order,elem)
+                out = self.run_simulation(OUT)
+                result.append(out[0])
+                #print(out[0])
+                #for OUT in out:
+                    #print(OUT)
+                    #result.append(OUT)
+
+            self.resultDict[OUT] = result
+
+        #import pdb; pdb.set_trace()
+
         inputs_ = np.array(inputs)
         for i in range(inputs_.shape[1]):
             self.resultDict[order[i]] = inputs_[:,i]
@@ -166,6 +177,8 @@ class Circuit:
         fig = plt.figure(figsize=(12,4))
         ax  = fig.add_subplot(1,1,1)
         space = 0
+        ticks = []
+        ticks_name = []
         for key in self.resultDict.keys():
             edge = []
             curr_time = 0
@@ -184,15 +197,23 @@ class Circuit:
                 first_edge = 'rise'
             signal = Dplotter.Signal(edge, first_edge, t_end)
             elem = signal.generate()
-            ax.plot(elem[0], elem[1] + space,c=np.random.rand(3,)/1.35, label=key, lw=6)
+            ax.plot(elem[0], elem[1] + space,c=np.random.rand(3,)/1.35, label=key, lw=5)
             ax.axis('equal')
             ax.grid()
             handles, labels = ax.get_legend_handles_labels()
-            ax.legend(handles[::-1], labels[::-1], title='Line', loc='upper left')
+            #ax.legend(handles[::-1], labels[::-1], title='Line', loc='upper left')
             #ax.legend()
             ax.set_yticks([])
+            ticks.append(space)
+            ticks_name.append(key)
             space += 1.5
 
+
+
+        ax.grid('on', axis='x')
+        ax.set_yticks(ticks)
+        ax.set_yticklabels(ticks_name)
+        #ax.set_yticks(['a','b','c','d'])
         plt.show()
 
 
@@ -215,10 +236,12 @@ if __name__ == "__main__":
     myCirc.addANDgate('node1', ['a','b'])
     myCirc.addANDgate('node2', ['c','d'])
     myCirc.addORgate('out', ['node1', 'node2'])
+    myCirc.addANDgate('out1', ['node1', 'node2'])
+
 
     inputs = [[1,1,1,1],[1,0,0,1],[0,0,1,1],[1,0,1,0],[1,0,0,0]]
 
-    result = myCirc.Run(inputs, 'out', time_step = 5, order=['a','b','c','d'])
+    result = myCirc.Run(inputs, ['out','out1'], time_step = 5, order=['a','b','c','d'])
     #print(result)
     #print(myCirc.result)
     myCirc.plot()
