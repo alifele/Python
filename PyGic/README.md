@@ -204,6 +204,15 @@ myCirc.plot()
 Notes:
 1. I have used https://logic.ly/demo website for the drawings.
 
+You will need the following packages to use this library
+* python 3.7 (or above)
+* numpy
+* matplotlib
+
+***
+
 Ali Fele Paranj
-Physics student at sharif university of tech.
-2020
+
+Physics student at sharif university of Tech.
+
+Summer 2020.
