@@ -1,12 +1,13 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-
+rand = (np.random.random(2)-0.5)*30
 
 
 def generate(x,y):
-    rand = (np.random.random(2)-0.5)*30
+
     return (x-rand[0])**2 + (y-rand[1])**2
+
 
 x = np.arange(-20,20,0.1)
 X,Y = np.meshgrid(x,x)
