@@ -11,7 +11,7 @@ class Circuit:
     def __init__(self, inout):
         self.gates = {} # the name of each gate is the output node of that gate
         self.node_dic_template = {
-            'val':[],
+            'val':[],  # func(input)
             'in':[],
             'func':[], # this indicates the value of the node
             'probe_state':[] # idicates the presence of the probe

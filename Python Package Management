@@ -1,0 +1,16 @@
+There is two golden options that you can use for the python package management:
+
+https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/
+
+
+
+https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html
+
+
+
+===================================
+If you are developing an app or website or something, it is better to have the yourenv as a subdirectory in your project folder.
+by using venv, you will be able to do so. But with conda, you can have a env that is at /conda/envs/... location and your scripts can use that as the shared env. but with conda, you have also option to put your env localy. as the conda website says, this act has some benefits, like :
+It makes it easy to tell if your project uses an isolated environment by including the environment as a subdirectory.
+
+It makes your project more self-contained as everything, including the required software, is contained in a single project directory.
