@@ -1,0 +1,9 @@
+first of all, to make your dev server accessible from your lan, you should run the server as :
+" python3 manage.py runserver 0.0.0.0:1998" (you can change the port number with anything in 0-65535)
+Now you can access to your server both localy on your localhost and from your LAN using the IP of yours computer on the local network.
+
+
+############# What acctually is this ###############33
+This is actually a http server written with django, that is listening to the root (i.e. http://IPADDRESS:PORT/)
+So if you send it POST request containing a file (you can use RESET Client app in the android), the server will get that file and will save it 
+on the root dircetory. And if you send the server a POST request containing a text or a json data, it will print the data on terminal
