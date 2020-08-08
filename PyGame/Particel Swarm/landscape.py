@@ -9,6 +9,7 @@ def generate(x,y):
     return (x-rand[0])**2 + (y-rand[1])**2
 
 
+
 x = np.arange(-20,20,0.1)
 X,Y = np.meshgrid(x,x)
 
