@@ -5,6 +5,7 @@ from landscape import generate
 import numpy as np
 import copy
 
+
 def transfer_pos(pos):
     pos[0] = (pos[0]-320)/16
     pos[1] = (pos[1]-240)/(-12)
