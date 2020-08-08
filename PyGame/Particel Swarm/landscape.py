@@ -2,11 +2,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 rand = (np.random.random(2)-0.5)*30
+rand1 = (np.random.random(2)-0.5)*30
+rand2 = (np.random.random(2)-0.5)*30
 
 
 def generate(x,y):
-
-    return (x-rand[0])**2 + (y-rand[1])**2
+    result = np.sin(-0.3*x+0.1*y)*(x-rand[0])**2 + np.sin(0.03*x-0.2*y)*(y-rand[1])**2 + np.sin(0.1*x+0.015*y)*(x-rand1[0])**2 + (y-rand1[1])**2 + 4*(x-rand2[0])**2 + (y-rand2[1])**2
+    return result
 
 
 
