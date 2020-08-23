@@ -1,0 +1,82 @@
+{
+  "Rule1": [
+    [
+      {
+        "type_": "input",
+        "MF_Function_type": "trapMF",
+        "params": {
+          "a": 1,
+          "b": 2,
+          "b1": 5,
+          "c": 8
+        }
+      },
+      "False"
+    ],
+    [
+      {
+        "type_": "input",
+        "MF_Function_type": "triMF",
+        "params": {
+          "a": 1,
+          "b": 2,
+          "c": 5
+        }
+      },
+      "False"
+    ],
+    [
+      {
+        "type_": "output",
+        "MF_Function_type": "triMF",
+        "params": {
+          "a": 1,
+          "b": 2,
+          "c": 5
+        }
+      },
+      "False"
+    ]
+  ],
+
+  "Rule2": [
+    [
+      {
+        "type_": "input",
+        "MF_Function_type": "trapMF",
+        "params": {
+          "a": 1,
+          "b": 2,
+          "b1": 5,
+          "c": 8
+        }
+      },
+      "False"
+    ],
+    [
+      {
+        "type_": "input",
+        "MF_Function_type": "triMF",
+        "params": {
+          "a": 1,
+          "b": 2,
+          "c": 5
+        }
+      },
+      "False"
+    ],
+    [
+      {
+        "type_": "output",
+        "MF_Function_type": "triMF",
+        "params": {
+          "a": 1,
+          "b": 2,
+          "c": 5
+        }
+      },
+      "False"
+    ]
+  ]
+
+}
